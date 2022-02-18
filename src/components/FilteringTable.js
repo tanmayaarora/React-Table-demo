@@ -1,15 +1,16 @@
 import React, {useMemo} from 'react';
-import {useSortBy, useTable} from 'react-table';
+import {useSortBy, useTable, useGlobalFilter} from 'react-table';
 import MOCK_DATA from './MOCK_DATA.json';
 import {COLUMNS} from './columns';
 import './table.css'
+import { GlobalFilter } from './GlobalFilter';
 
-export const SortingTable = () => {
+export const FilteringTable = () => {
 
     const columns = useMemo(() => COLUMNS, []);
     const data = useMemo(() => MOCK_DATA, []);
 
-    const tableInstance = useTable({columns,data},useSortBy);
+    const tableInstance = useTable({columns,data}, useGlobalFilter);
 
     const {
         getTableProps,
@@ -17,20 +18,23 @@ export const SortingTable = () => {
         headerGroups,
         footerGroups,
         rows,
-        prepareRow
+        prepareRow,
+        state,
+        setGlobalFilter
     } = tableInstance;
 
+    const {globalFilter} = state;
+
     return(
+        <>
+        <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
         <table {...getTableProps()}>
             <thead>
                 {headerGroups.map((headerGroup) => (
                     <tr {...headerGroup.getHeaderGroupProps()}>
                         {headerGroup.headers.map((column) => (
-                            <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                            <th {...column.getHeaderProps()}>
                                 {column.render('Header')}
-                                <span>
-                                    {column.isSorted? (column.isSortedDesc? '▽':'△'): ''}
-                                </span>
                             </th>
                         ))}
                     </tr>
@@ -62,5 +66,6 @@ export const SortingTable = () => {
                     ))}
             </tfoot>
         </table>
+        </>
     )
 }
