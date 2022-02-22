@@ -16,9 +16,11 @@ export const COLUMNS = [
         accessor: 'date_of_birth'
     },
     {
-        Header: 'Country'
+        Header: 'Country',
+        accessor: 'country'
     },
     {
-        Header: 'Phone'
+        Header: 'Phone',
+        accessor: 'phone'
     }
 ]
